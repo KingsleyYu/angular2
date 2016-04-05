@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>给组件声明属性</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : "ez-app",
+        styles:[`//在这里给组件添加样式
+                    div.ez-app{
+                        background:#ccc;padding:5px;
+                    }
+                    div.ez-card{
+                        background:#00695c;color:white;border-radius:5px;padding:10px;min-height:100px;font-family:Courier;}
+                    div.ez-card b{color:#ff8900;}
+                `],
+        properties:["name","country"],//定义模板中要使用的变量
+        template :  `
+                    <div class='ez-card'>
+                        My name is <b>{{name}}</b>,
+                        I am from <b>{{country}}</b>.
+                    </div>
+                    `
+    })
+    class EzApp{
+        constructor(){
+            this.name = "Mike";
+            this.country = "Sweden";
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+
+</body>
+</html>

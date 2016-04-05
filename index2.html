@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<!--组件通过标签匹配-->
+<!--
+<ez-app></ez-app>
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : "ez-app",//标签名选择符,将匹配：<ez-one>...</ez-one>
+        template : `<h1>Hello world!</h1>`
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+-->
+
+
+<!--组件通过样式匹配-->
+<!--
+<any class="ez"></any>
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : ".ez",//通过class将匹配：<any class="ez"></any>
+        template : `<h1>Hello world!</h1>`
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+-->
+
+
+<!--组件通过标签属性匹配-->
+
+<any ez='a'></any>
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector:"[ez='a']",//匹配：<any ez='a'></any>中的ez='a'
+        template:`<h1>Hello world!</h1>`
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+
+</body>
+</html>

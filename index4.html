@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>设置样式</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<!--
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : "ez-app",
+        styles:[`//在这里给组件添加样式
+                    div.ez-greeting{
+                        font-family:Courier;
+                        background:#ede7f6;
+                        box-shadow:0 2px 5px 0;
+                    }
+                    h1{
+                        background:#4dba6c;color:#fff
+                    }
+                    div.content{
+                        padding:10px;
+                    }
+                `],
+        template : `
+                <div class="ez-greeting">
+                    <h1>Hello,Angular2</h1>
+                    <div class="content">
+                        <p>
+                            使用ES6开发Angular2应用的一个好处就是，可以不用拼接样式字符串了。
+                        </p>
+                        <ul>
+                            <li>在样式中可以使用任何标准的CSS语法</li>
+                            <li>如果样式定义在单独的文件里，可以使用styleUrls引入</li>
+                        </ul>
+                    </div>
+                </div>
+            `
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+-->
+
+<!--加载外部模板和样式-->
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : "ez-app",
+        styleUrls:["cssTemplate/template1.css"],
+        templateUrl : "htmlTemplate/template1.html"
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>Hello</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+	<ez-app></ez-app>
+    <script type="text/typescript">
+        //从模块库引入三个类型定义
+    	import {Component} from "angular2/core";
+        import {bootstrap} from "angular2/platform/browser";
+
+        //组件定义
+        //@Component是给类EzApp附加的元信息， 被称为注解/Annotation。
+        @Component({
+			selector:"ez-app",//是组件标签
+        	template : `<h1>Hello,Angular2</h1>`//组件内容
+        })
+        class EzApp{}
+
+        //渲染组件
+        bootstrap(EzApp);
+    </script>
+</body>
+</html>

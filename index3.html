@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>组件模板</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+    <ez-app></ez-app>
+    <!--1.把html标签写在js里-->
+    <!--
+    <script type="text/typescript">
+        import {Component} from "angular2/core";
+        import {bootstrap} from "angular2/platform/browser";
+
+        @Component({
+            selector : "ez-app",
+            template :
+                        `
+                            <h1>Hello,Angular2</h1>
+                            <p>
+                                使用ES6开发Angular2应用的一个好处就是，可以不用拼接模板字符串了。
+                            </p>
+                            <ul>
+                                <li>在模板中可以使用任何标准的HTML元素</li>
+                                <li>如果模板定义在单独的文件里，可以使用templateUrl引入</li>
+                            </ul>
+                        `
+        })
+        class EzApp{}
+
+        bootstrap(EzApp);
+    </script>
+    -->
+
+    <script type="text/typescript">
+        import {Component} from "angular2/core";
+        import {bootstrap} from "angular2/platform/browser";
+
+        @Component({
+            selector : "ez-app",
+            templateUrl : "htmlTemplate/template1.html"
+        })
+        class EzApp{}
+
+        bootstrap(EzApp);
+    </script>
+</body>
+</html>

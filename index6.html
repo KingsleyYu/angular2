@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>声明属性</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    //具有属性接口的组件 - EzCard，子组件
+    @Component({
+        selector:"ez-card",
+        styles:[`//在这里给组件添加样式
+                    div.ez-app{
+                        background:#ccc;padding:5px;
+                    }
+                    div.ez-card{
+                        background:#00695c;
+                        color:white;
+                        border-radius:5px;
+                        padding:10px;
+                        min-height:100px;
+                        font-family:Courier;
+                    }
+                    div.ez-card b{
+                        color:#ff8900;
+                    }
+                `],
+        properties:["name","country"],//定义模板中要使用的变量
+        template : `
+                    <div class='ez-card'>
+                        My name is <b>{{name}}</b>,
+                        I am from <b>{{country}}</b>.
+                    </div>
+                    `
+    })
+    class EzCard{
+        constructor(){
+            this.name = "Mike";
+            this.country = "Sweden";
+        }
+    }
+
+    //根组件 - EzApp,也可以叫父组件
+    @Component({
+        selector:"ez-app",
+        directives:[EzCard],
+        template:`<ez-card [name]="'雷锋'" [country]="'中国'"></ez-card>`//在父组件渲染子组件
+                 //在使用子组件时，在子组件标签上定义的属性，假如和子组件上的构造方法内定义的属性相同，
+                 //侧会覆盖子组件构造方法内定义的属性
+    })
+    class EzApp{}
+
+    //渲染组件
+    bootstrap(EzApp);
+</script>
+</body>
+</html>
