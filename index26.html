@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>NgControlName - 命名控件指令</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+    import {CORE_DIRECTIVES,FORM_DIRECTIVES} from "angular2/common";
+
+    @Component({
+        selector:"ez-app",
+        directives:[CORE_DIRECTIVES,FORM_DIRECTIVES],
+        template:`
+                    <form>
+                        <ul>
+                            <li>姓名：<input type="text" ngControl="name" [(ngModel)]="data.name"></li>
+                            <li>姓别：
+                                <select ngControl="gender" [(ngModel)]="data.gender">
+                                    <option value="Male">男</option>
+                                    <option value="Female">女</option>
+                                </select>
+                            </li>
+                            <li>地址：<input type="text" ngControl="address" [(ngModel)]="data.address"></li>
+                            <li>电话：<input type="text" ngControl="telephone" [(ngModel)]="data.telephone"></li>
+                            <li>已婚：<input type="checkbox" ngControl="marriage" [(ngModel)]="data.marriage"></li>
+                        </ul>
+                    </form>
+                    <pre>{{decode(data)}}</pre>
+                `
+        //<pre>{{decode(data)}}</pre>:可以直接调用控制器内的方法。data为数据对象。
+        //在angular中数据都是双向的。Model数据发生变化，会把数据同步到控制器内
+        ,
+        styles:[`
+            form{background:#e1f5fe;}
+            ul{list-style:none;padding:10px;margin:0px;}
+            li{line-height:30px;}
+        `]
+    })
+    class EzApp{
+        constructor(){
+            this.data = {
+                name : "whoami",
+                gender:"Female",
+                address:"上海市"，
+                telephone:"1348238555",
+                marriage:true
+            };
+        }
+        decode(val){
+            return JSON.stringify(val,null,"\t");
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>
