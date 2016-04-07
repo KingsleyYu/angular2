@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>NgStyle - 内联样式</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector:"ez-app",
+        template:`
+                    <h1 [ngClass]="cns">EZ-APP</h1>
+                    <h1 [ngClass]="{ colorful : true }">EZ-APP</h1>
+                 `
+                 //3.[ngClass]="cns":通过[ngClass]给标签添加class样式。
+                 //  接收一个对象(object)类型表达式的值。键为要使用样式类名，值为布尔值。true是使用，false不使用
+        ,
+        //1.给组件定义样式
+        styles : [`
+                    .colorful{color:red;}
+                    .italic{font-style:italic}
+                    .bold{font-weight:bold}
+                    .border{border: 1px #7b007b solid;}
+                `]
+    })
+    class EzApp{
+        constructor(){
+            //2.在构造方法内初始话样式类
+            this.cns = {
+                colorful : true,
+                italic : true,
+                bold : true,
+                border:true
+            };
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

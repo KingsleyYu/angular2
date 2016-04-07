@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>| - 管道  过滤器</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+    import {CORE_DIRECTIVES} from "angular2/common";
+
+    @Component({
+        selector:"ez-app",
+        template:`
+                    <h1>管道/Pipe</h1>
+                    <div *ngFor="#p of data">{{p.name}} : {{p.score}}</div>
+                    <hr>
+                    <div>{{ avgScore() | number:'2.2-2' }}</div>
+                `
+                //{{ avgScore() | number:'2.2-2'}} : 把avgScore()方法返回的值通过 "|"过滤器 根据数值的正则处理一下，
+                //然后返回处理后的结果。类似angular1里的过滤器
+        ,
+        directives:[CORE_DIRECTIVES],
+        styles : [`div{max-width:200px;text-align:right;}`]
+    })
+    class EzApp{
+        constructor(){
+            this.data = [
+                {name:'John',score:89},
+                {name:'Mike',score:72},
+                {name:'Linda',score:93.5},
+                {name:'Luke',score:80},
+                {name:'Jango',score:97},
+                {name:'Ado',score:95},
+                {name:'Peter',score:93}
+                {name:'Mary',score:92},
+                {name:'Tom',score:99}];
+        }
+        avgScore(){
+            return this.data.map( a=>a.score).reduce((a,b) => a+b , 0) / this.data.length;//遍历map
+
+            /*
+            var avg = this.data.map(a=>a.score).reduce((a,b) => a+b , 0) / this.data.length;
+            return avg.toFixed(2);
+            */
+            //avaScript 数组reduce()方法同时应用一个函数针对数组的两个值(从左到右)，以减至一个值。
+            //array.reduce(callback[, initialValue]);
+            //callback : 函数执行在数组中每个值
+            //initialValue : 对象作为第一个参数回调的第一次调用使用
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

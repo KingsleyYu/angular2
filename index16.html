@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>使用分支逻辑</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    //引入NgSwitch类型
+    import {Component,} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : "ez-promotion",
+        properties:["gender","title"],//2.接收父组件传过来的变量
+        template : `
+                        <div [ngSwitch]="gender">
+                            <h1>{{ title }}</h1>
+                            <template ngSwitchWhen="Male">
+                                <img src="img/male-ad.jpg" class="banner">
+                            </template>
+                            <template ngSwitchWhen="Female">
+                                <img src="img/female-ad.png" class="banner">
+                            </template>
+                            <template ngSwitchDefault>
+                                <h1>Learn Something, NOW!</h1>
+                            </template>
+                        </div>
+                    `
+                   //3.[ngSwitch]="gender" : 使用ngSwitch来引用一个变量
+                   //<template ngSwitchWhen="Male"> : 来判断变量是否和指定的值相等，相等的话，模板内的标签就显示，不等就不显示
+                   //<template ngSwitchDefault> : 都不相等时，就显示默认的template
+    })
+    class EzPromotion{}
+
+    @Component({
+        selector:"ez-app",
+        directives:[EzPromotion],
+        template:   `
+                        <ez-promotion gender="Female" title="{{title}}"></ez-promotion>
+                    `
+                    //1.在渲染子组件处添加变量gender和变量title
+    })
+    class EzApp{
+        constructor(){
+            this.title = "This is a title";
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

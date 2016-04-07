@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>有状态管道</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+<script type="text/typescript">
+    import {Component,Pipe} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Pipe({
+        name : "countdown",
+        pure : false//设置为false，表示每次数据发生变化，会自动触发过滤器，把变化后的数据渲染到视图
+                    //设置true，表示每次数据发送变化，不会自动触发过滤器。不会把变化后的数据渲染到视图
+    })
+    class EzCountdown{
+        transform(input){
+            this.initOnce(input);
+            return this.counter;
+        }
+        //初始化一次
+        initOnce(input){
+            //判断是否初始化过一次，没有过返回undefined
+            if(this.initialized) return; //是一个标记，主要让该方法只被调用一次
+            //然后设置true，说明已经初始化了
+            this.initialized = true;
+
+            var self =this;
+            self.counter = input;
+            self.timer = setInterval(function(){
+                self.counter--;//数据在这里发生变化，会时时反应到视图。因为数据是双向的
+                console.log(self.counter);
+                if(self.counter === 0){
+                    clearInterval(self.timer);
+                }
+            },1000);
+        }
+    }
+
+
+    @Component({
+        selector:"ez-app",
+        template:`<h1>有状态管道 : {{ 10 | countdown }}</h1>`,
+        pipes : [EzCountdown]
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

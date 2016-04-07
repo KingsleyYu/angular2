@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>AsyncPipe异步管道(异步过滤器)</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component,Pipe} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+    import {Observable} from "rxjs/Observable";
+
+    @Component({
+        selector:"ez-app",
+        template:   `
+                        <h1>AsyncPipe</h1>
+                        <p>{{ data | async | json }}</p>
+                    `
+                    //data为要显示的数据。由于该数据从是从服务器上获取的，比较慢
+                    //async使用了angular2提供的异步过滤器，等待结果返回在显示出来。
+                    //json 把结果解析成json字符串输出
+    })
+    class EzApp{
+        constructor(){
+            var _this = this;
+            //使用一个延迟执行，模拟网络加载慢
+            setTimeout(function(){
+                _this.data = window.fetch("json/music.json")//类似ajax
+                    .then( rsp => rsp.json());
+            },5000);
+
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

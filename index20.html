@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>管道级联，多个管道</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+
+    <ez-app></ez-app>
+    <script type="text/typescript">
+        import {Component} from "angular2/core";
+        import {bootstrap} from "angular2/platform/browser";
+
+        @Component({
+            selector:"ez-app",
+            template:`
+                        <h1>管道级联</h1>
+                        <p>{{ (text | slice:0:30 | uppercase) + "..." }}</p>
+                    `
+                    //(text | slice:0:30 | uppercase):如果要使用多个过滤器，需要在变量外添加括号，然后对变量执行操作
+        })
+        class EzApp{
+            constructor(){
+                this.text = `Next we demonstrate this pipe in a test component
+                            whose template defines two bindings`;
+            }
+        }
+
+        bootstrap(EzApp);
+    </script>
+</body>
+</html>

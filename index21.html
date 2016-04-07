@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义过滤器</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+<script type="text/typescript">
+    import {Component,Pipe} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    //使用注解，定义一个过滤器
+    @Pipe({name:"title"})//设置过滤器名称
+    class TitlePipe{
+        //定义转换数据的方法
+        transform(input,args){//参数1：原数据。参数2：一个可变参数。
+            console.log(input,args);
+            return input.toUpperCase()+args;//返回经过过滤器处理的结果
+        }
+    }
+
+    //定义组件
+    @Component({
+        selector:"ez-app",
+        template:   `
+                        <h1>管道/Pipe</h1>
+                        <p>{{text | title : 123}}</p>
+                        <p>{{(text | title : 123  | title : 456)}}</p>
+                    `
+        ,
+        pipes : [TitlePipe]//在这个组件中使用这个过滤器
+    })
+    class EzApp{
+        constructor(){
+            this.text = "what a wonderful world!";
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

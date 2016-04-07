@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>预置过滤器</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector:"ez-app",
+        template:`
+                    <h1>预置过滤器</h1>
+                    <p>{{ "01234567890" | slice:5:9}}</p>
+                    <p>{{ "what a wonderful day!" | uppercase }}</p>
+                    <p>{{ "STAY HUNGRY, STAY FOOLISH" | lowercase }}</p>
+                    <p>{{ pi | number:'3.1-10' }}</p>
+                    <p>{{ pi | percent:'3.1-10'}}</p>
+                    <p>{{ day | date:'yMMdd'}}</p>
+                `
+                /*
+                <p>{{ "01234567890" | slice:5:9}}</p> ：截取
+                <p>{{ "what a wonderful day!" | uppercase }}</p> ：小写转大写
+                <p>{{ "STAY HUNGRY, STAY FOOLISH" | lowercase }}</p>：大写转小写
+                <p>{{ pi | number:'3.1-10' }}</p> : 以数值类型显示
+                <p>{{ pi | percent:'3.1-10'}}</p> : 以百分数的形式显示
+                <p>{{ day | date:'yMMdd'}}</p>：格式化日期
+                */
+    })
+    class EzApp{
+        constructor(){
+            this.day = new Date();
+            this.pi = Math.PI;
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

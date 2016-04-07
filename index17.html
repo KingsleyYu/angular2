@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>NgFor- 循环逻辑</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    //引入NgSwitch类型
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({
+        selector : "ez-star",
+        styles : [`
+                    div{background:url(img/jason.jpg);}
+                    h2{background:#26a69a;padding:5px;margin:0px;color:white}
+                    ul{margin:0px;padding:0px;list-style:none;font-family:Courier;}
+                    li{line-height:30px;border-bottom:1px solid #ccc;color:#0f0;}
+                `],
+        template :   `
+                        <div>
+                            <h2>{{actor}} - Films</h2>
+                            <ul>
+                                <li *ngFor="#film of films">{{film}}</li>
+                            </ul>
+                        </div>
+                    `
+                    //************************************************************************************
+                    //<li *ngFor="#film of films">{{film}}</li> : 使用*ngFor="#film of films"来遍历一个数组。
+                    //films:要遍历的对象，#film：保存遍历出来的每个值。film：取出遍历的每个值，并渲染模板
+    })
+    class EzStar{
+        constructor(){
+            this.actor = "Jason Statham";
+            this.films = [
+                "Mechanic: Rescurrection / 2016",
+                "Spy / 2015",
+                "Furious 7 /2015",
+                "Wild Card / 2015",
+                "The Expendables / 2014",
+                "Home Front / 2013",
+                "Hummingbird / 2013",
+                "Fast & Furious 6 / 2013",
+                "Parker / 2013"
+            ];
+        }
+    }
+
+    @Component({
+        selector:"ez-app",
+        directives:[EzStar],
+        template:   `
+                        <ez-star></ez-star>
+                    `
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+
+</script>
+</body>
+</html>

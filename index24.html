@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>NgForm - 表单指令</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+    import {CORE_DIRECTIVES,FORM_DIRECTIVES} from "angular2/common";
+    //NgForm指令和NgControlName指令都包含在预定义的数组变量FORM_DIRECTIVES中，
+    //所以我们在 组件注解的directives属性中直接声明FORM_DIRECTIVES就可以在模板中直接使用这些指令了：
+
+    //EzApp组件
+    @Component({
+        selector:"ez-app",
+        directives:[FORM_DIRECTIVES,CORE_DIRECTIVES],//引用表单指令
+        template:`
+                    <form #f="ngForm" (submit)="search(f.value)">
+                        <input type="text" ngControl="kw">
+                        <button type="submit">搜索</button>
+                    </form>
+                    <!--给个简单的反馈-->
+                    <h1 *ngIf="kw!=''">正在搜索 {{kw}} ...</h1>
+                `
+                //#f="ngForm"：把当前表单对象，赋值给f变量
+                //f.value：可以获取表单表单中键值对的对象
+                //ngControl="kw" : 给表单定义值得键
+                //(submit)：监听表单提交事件，值为类里面定义的方法
+        ,
+        styles:[`form{background:#90a4ae;padding:5px;}`]
+    })
+    class EzApp{
+        constructor(){
+            this.kw = "";//初始化表单值
+        }
+        search(val){
+            console.log(val);
+            this.kw = val.kw;
+            //假装在搜索，2秒钟返回
+            setTimeout(()=>this.kw="",2000);
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

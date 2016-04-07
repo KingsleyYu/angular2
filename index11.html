@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>事件绑定</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script  type="text/typescript">
+    import {Component,View} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Component({selector:"ez-app"})//定义组件选择器 c
+    @View({//定义组件模板视图 v
+        styles:[`
+                   button{width:100%;padding:10px;}
+                   b{color:red}
+                `],
+        template:`
+                    <h1>Your turn! <b>{{sb}}</b></h1>
+                    <button (click)="roulette()">ROULETTE</button>
+                 `
+                 //(click)="roulette()"给当前标签按钮绑定事件
+    })
+    class EzApp{//m
+        constructor(){
+            this.names = ["Jason","Mary","Linda","Lincoln","Albert","Jimmy"];
+            this.roulette();
+        }
+        //轮盘赌
+        roulette(){
+            var idx = parseInt(Math.random()*this.names.length);//转换成0到6的整数
+            this.sb = this.names[idx];//给类添加一个变量sb，并赋值
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

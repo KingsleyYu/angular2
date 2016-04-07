@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>局部变量</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+    <ez-app></ez-app>
+
+    <script type="text/typescript">
+        import {Component} from "angular2/core";
+        import {bootstrap} from "angular2/platform/browser";
+
+        @Component({
+            selector:"ez-app",
+            template:`
+                        <h1>
+                            <button (click)="v_who.style.cssText='color:red;background-color: #0000ed;'">变色</button>
+                            I choose
+                            <b #v_who>WHO?</b>
+                        </h1>
+                        <button (click)="v_who.textContent = 'Jason'">Jason</button>
+                        <button (click)="v_who.textContent = 'Mary'">Mary</button>
+                        <button (click)="v_who.textContent = 'Linda'">Linda</button>
+                        <button (click)="v_who.textContent = 'Lincoln'">Lincoln</button>
+                        <button (click)="v_who.textContent = 'Jimmy'">Jimmy</button>
+                        <button (click)="v_who.textContent = 'Albert'">Albert</button>
+                    `
+                    //<b #v_who>WHO?</b> : 给标签定义一个类似id的东西。通过这个东西可以获取该标签
+                    //(click)="v_who.style.cssText='color:red;background-color: #0000ed;'"： 在表达式中通过v_who可以获取该标签
+        })
+        class EzApp{}
+
+        bootstrap(EzApp);
+    </script>
+</body>
+</html>
