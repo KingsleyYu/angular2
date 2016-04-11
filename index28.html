@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>NgFormModel - 绑定已有控件组</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+    import {Control,ControlGroup,FORM_DIRECTIVES} from "angular2/common";
+
+    @Component({
+        selector:"ez-app",
+        directives:[FORM_DIRECTIVES],
+        template:`
+            <h5>基本信息</h5>
+            <!--1.绑定控件组与控件对象-->
+            <div [ngFormModel]="controls">
+                <ul>
+                                     <!--ngControl="name"控件对象-->
+                    <li>姓名：<input type="text" ngControl="name"></li>
+                    <li>地址：<input type="text" ngControl="address"></li>
+                    <li>电话：<input type="text" ngControl="telephone"></li>
+                </ul>
+            </div>
+            <h5>个人爱好</h5>
+            <div [ngFormModel]="hobby">
+                <ul>
+                    <li>水果：<input type="text" ngControl="fruits"></li>
+                    <li>运动：<input type="text" ngControl="motion"></li>
+                    <li>音乐：<input type="text" ngControl="music"></li>
+                </ul>
+            </div>
+            <!--4.时时输出数据-->
+            <pre>{{dump()}}</pre>
+	    `,
+        styles:[`
+            div{background:#e1f5fe;}
+            ul{list-style:none;padding:10px;margin:0px;}
+            li{line-height:30px;}
+	    `]
+    })
+    class EzApp{
+        constructor(){
+            //3.创建控件组及控件对象
+            this.controls = new ControlGroup({
+                name : new Control("Jason"),
+                address : new Control("London U.K."),
+                telephone : new Control("114")
+            });
+            this.hobby=new ControlGroup({
+                fruits : new Control("苹果"),
+                motion : new Control("跑步"),
+                music  : new Control("啦啦啦")
+            });
+        }
+        dump(){
+            return JSON.stringify(this.controls.value,null,"\t")+JSON.stringify(this.hobby.value,null,"\t");
+        }
+    }
+
+    bootstrap(EzApp);
+
+</script>
+</body>
+</html>

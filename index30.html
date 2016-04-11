@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>inputs - 声明属性值映射</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component,View,Directive,ElementRef,Renderer,Inject} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    //1.定义指令
+    @Directive({
+        selector:"[ez-h]",//2.声明使指标签的属性形式，使用指令
+        inputs : ["bgColor:ez-h"]
+        //3.inputs - 声明属性值映射。也就是[ez-h]="'red'"这样使用，相当于调用类中的set bgColor(c)
+        //方法，red为方法的接收的参数
+    })
+    class EzHilight{
+        //4.通过构造方法，注入的元素，并赋值初始化属性
+        constructor(@Inject(ElementRef) er){//er：可以理解为angular2的dom元素
+            this.er = er;
+        }
+        //5.封装设置背景颜色的方法
+        set bgColor(c){
+            var el = this.er.nativeElement;//把angular2的dom元素转换为原生dom元素
+            el.style.background= c;//上面说过，red为方法的接收的参数，就是传过来的样式
+        }
+    }
+
+    //组件定义
+    @Component({
+        selector : "ez-app",
+        directives:[EzHilight],//6.使用指令类，相当new EzHilight()这一步
+        template : `
+                            <!--7.相当调用指令inputs输入接口，把对应方法接收的值传过去-->
+            <p>Now it is a <i [ez-h]="'red'">good</i> time to learn
+            some <i [ez-h]="'green'">wonderful</i> things!</p>
+        `
+    })
+    class EzApp{
+        constructor(){}
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>

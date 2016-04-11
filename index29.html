@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Directive - 定义指令元数据</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component,View,Directive,ElementRef,Renderer,Inject} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+    /*
+    指令是Angular对HTML进行扩展的基本手段。与Angular1.x不同，在Angular2中，
+    指令被明确地划分为三种类型：
+
+    组件     - 组件其实就是带有模板的指令
+    属性指令 - 属性指令用来改变所在元素的外观或行为，例如NgClass和NgStyle指令
+    结构指令 - 结构指令用来向DOM中添加或删除元素，例如NgIf和NgFor指令。
+    */
+    //1.通过@Directive()注解的方式定义指令
+    //模板中具有ez-h的元素，Angular2框架都将为其生成一个EzDirective类实例。
+    @Directive({selector:"[ez-h]"})//指令是通过标签的属性使用的
+    class EzHilight{
+        //2.ElementRef - 获取指令所在DOM对象
+        constructor(@Inject(ElementRef) er){//把引用指令的标签注入进来
+            var el = er.nativeElement;//转换成原生的dom元素
+            el.style.background="yellow";
+            el.style.border="1px #000000 solid";
+            el.innerHTML="hello world!!";
+        }
+    }
+
+    //组件定义
+    @Component({
+        //3.使用自定义指令
+        selector : "ez-app",
+        directives:[EzHilight],//使用指令类，相当new EzHilight()也一步
+        template : `
+                            <!--通过属性使用指令-->
+            <p>Now it is a <i ez-h>good</i> time to learn
+            some <i ez-h>wonderful</i> things!</p>
+        `
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+
+</script>
+</body>
+</html>
