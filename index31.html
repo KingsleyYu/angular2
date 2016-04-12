@@ -16,7 +16,8 @@
         selector:"[ez-h]",
         inputs : ["bgColor:ez-h"],
         host : {
-            "(click)" : "onClick($event)"
+            "(click)" : "onClick($event)",
+            "(mouseover)" : "onMouseover($event)"//添加鼠标悬停事件
         }
     })
     class EzHilight{
@@ -44,6 +45,15 @@
 
             //理解：这个this是执行指令自己，当前点击对象。this上的属性也都是指令独有的。
         }
+        onMouseover($event){
+            if(this.flag){
+                    this.el.style.color = "#cccccc";
+                }
+                else {
+                    this.el.style.color = "#7b007b";
+                }
+                this.flag = !this.flag;//修改自己状态
+            }
     }
 
     //组件定义
