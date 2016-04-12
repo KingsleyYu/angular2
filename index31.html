@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>host - 声明事件监听</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component,View,Directive,ElementRef,Renderer,Inject} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    @Directive({
+        selector:"[ez-h]",
+        inputs : ["bgColor:ez-h"],
+        host : {
+            "(click)" : "onClick($event)"
+        }
+    })
+    class EzHilight{
+        //指令被使用几次，该构造方法就会被调用几次。每个this执行执行自己
+        constructor(@Inject(ElementRef) er){//在初始化时得到每个指令使用的标签
+            this.el = er.nativeElement;//转换成原生dom对象
+            this.el.style.cursor = "pointer";//设置样式
+            this.flag = true;//初始化一个状态
+        }
+        //监听指令渲染
+        ngOnChanges(c){
+             console.log(c.bgColor.currentValue);//获取指令传过来的参数。不过在this上都能获取到，所以感觉没用
+             this.el.style.background=this.bgColor;//this：表示渲染指令标签的一个对象。可以得到很多信息。
+            //this.el.style.background = c.bgColor.currentValue;
+        }
+        //监听点击事件
+        onClick($event){
+            if(this.flag){//状态为true时
+                this.el.style.background = "transparent";//把自己背景颜色修改为透明
+            }
+            else {
+                this.el.style.background = this.bgColor;//把自己背景颜色修改为传递过来的参数
+            }
+            this.flag = !this.flag;//修改自己状态
+
+            //理解：这个this是执行指令自己，当前点击对象。this上的属性也都是指令独有的。
+        }
+    }
+
+    //组件定义
+    @Component({
+        selector : "ez-app"
+    })
+    @View({
+        directives:[EzHilight],
+        template : `
+		<p>Now it is a <i [ez-h]="'red'">good</i> time to learn
+		some <i [ez-h]="'green'">wonderful</i> things!</p>
+	`
+    })
+    class EzApp{}
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>
