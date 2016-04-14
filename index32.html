@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>服务 - 封装可复用代码</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+    import {Component} from "angular2/core";
+    import {bootstrap} from "angular2/platform/browser";
+
+    //定义一个简单的算法服务
+    class EzAlgo{
+        add(a,b) { return a+b; }
+        sub(a,b) { return a-b; }
+    }
+
+    //组件定义
+    @Component({
+        selector : "ez-app",
+        template : `
+                    <form>
+                        <input type="text" ngControl="a" [(ngModel)]="a">
+                        +
+                        <input type="text" ngControl="b" [(ngModel)]="b">
+                        =
+                        {{add()}}
+                    </form>
+                    <form>
+                        <input type="text" ngControl="c" [(ngModel)]="c">
+                        -
+                        <input type="text" ngControl="d" [(ngModel)]="d">
+                        =
+                        {{sub()}}
+                    </form>
+                    `
+    })
+    class EzApp{
+        constructor(){
+            this.a = 37;
+            this.b = 128;
+            this.c = 100;
+            this.d = 70;
+            //实例化服务对象
+            this.algo = new EzAlgo();
+        }
+        add(){
+            var a = +this.a,
+                b = +this.b;
+            return this.algo.add(a,b);
+        }
+        sub(){
+            var c = +this.c,
+                d = +this.d;
+            return this.algo.sub(c,d);
+        }
+    }
+
+    bootstrap(EzApp);
+</script>
+</body>
+</html>
