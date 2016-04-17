@@ -1,6 +1,6 @@
 # angular2-lesson-lib
 
-这是汇智网课程[Angular2(Beta)入门](http://www.hubwiz.com/course/567a414e660c92d638a68bf3)使用的
+这是本demo[Angular2(Beta)入门](https://github.com/duanshanghanqing/angular2)使用的
 库文件，你可以下载到本地练习。
 
 文件清单：
@@ -49,4 +49,53 @@
 
 	~$ cd angular2-beta-stack
 	~/angular2/beta-stack$ gulp
+
+	
+	
+#### demo介绍
+    1.快速上手
+	    index1.html ** hello world示例
+	2.组件开发 - 声明元数据    
+	    index2.html     ** selector - 声明选择符
+	    index3.html     ** template/templateUrl - 声明模板
+	    index4.html     ** styles/styleUrls - 设置样式
+	    index5.html     ** properties - 声明属性
+	    index6.html     ** 在子组件标签上定义的属性,并设置默认值
+	    index7.html     ** events - 声明事件
+	    index8.html     ** directives - 引用指令
+	3.组件开发 - 模板基本语法    
+	    index9.html     ** {{model}} - 文本插值
+	    index10.html    ** [property] - 属性绑定 和 样式属性绑定
+	    index11.html    ** (event) - 事件绑定
+	    index12.html    ** #var - 局部变量
+	4.组件开发 - 在模板中使用预置指令    
+	    index13.html    ** NgStyle - 内联样式
+	    index14.html    ** NgClass - 样式类
+	    index15.html    ** NgIf- 条件逻辑
+	    index16.html    ** NgSwitch - 分支逻辑
+	    index17.html    ** NgFor- 循环逻辑
+	    index18.html    ** | - 管道/Pipe  过滤器
+	    index19.html    ** 预置过滤器
+	    index20.html    ** 管道级联，多个管道
+	    index21.html    ** 自定义过滤器
+	    index22.html    ** 有状态管道：过滤器会自动检测数据变化，并输出
+	    index23.html    ** AsyncPipe异步管道(异步过滤器)：等到服务器响应完成才会执行，详细看demo
+	5.组件开发 - 在模板中处理表单输入
+	    index24.html    ** NgForm - 表单指令
+	    index25.html    ** NgControlName - 命名控件指令
+	    index26.html    ** NgControlGroup - 命名控件组
+	    index27.html    ** NgFormControl - 绑定已有控件对象
+	    index28.html    ** NgFormModel - 绑定已有控件组
+	6.指令开发 - 增强HTML功能 
+	    index29.html    ** Directive - 定义指令元数据   
+	    index30.html    ** inputs - 声明属性值映射：详情看demo中的3
+	    index31.html    ** host - 声明事件监听：监听dom事件
+	    index32.html    ** 服务 - 封装可复用代码：把公用的逻辑抽出，封装成一个服务
+	    
+	    
+	    
+	    
+	    
+	    
+	    
 	
