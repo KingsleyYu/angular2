@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>注入服务 - providers</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app></ez-app>
+
+<script type="text/typescript">
+import {Inject,Component} from "angular2/core";
+import {bootstrap} from "angular2/platform/browser";
+/*
+解释：
+在前一节的示例代码中，组件EzAlgo直接在构造函数中实例化了一个EzAlog对象，
+这造成了EzApp和EzAlgo的强耦合，这里我们可以使用Angular2的注入器/Injector进行 解耦：
+*/
+//1.定义一个简单的算法服务类
+class EzAlgo{
+	add(a,b) { return a+b; }
+	sub(a,b) { return a-b; }
+}
+
+//组件定义
+@Component({
+	selector : "ez-app",
+	providers : [EzAlgo],//2.声明依赖
+	template : `
+			<form>
+				<input type="text" ngControl="a" [(ngModel)]="a">
+				+
+				<input type="text" ngControl="b" [(ngModel)]="b">
+				=
+				{{add()}}
+			</form>`,
+	styles:[`
+		*{font-size:30px;font-weight:bold;}
+		input{width:100px;}
+	`]
+})
+class EzApp{
+	//注入参数声明
+	constructor(@Inject(EzAlgo) algo){//3.在这里，通过  @Inject(注入的服务类)  服务的示例。
+	                                  //这样的方式就创建了EzAlgo服务类的示例
+		this.a = 37;
+		this.b = 128;
+		this.algo = algo;//4.在构造方法上用一个属性接收 服务示例。
+		                 //就和在index.32中 this.algo = new EzAlgo(); 是一样的效果，
+		                 //把实例化对象的事交给angular2做，做为开发人员我们就不用造大量的对象，来消耗内存
+		                 //用注入的形式更赞，这样的形式和index.32区别很大
+	}
+	add(){
+		var a = +this.a,
+			b = +this.b;
+		return this.algo.add(a,b);
+	}
+}
+
+bootstrap(EzApp);
+
+</script>
+</body>
+</html>

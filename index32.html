@@ -48,7 +48,7 @@
             this.algo = new EzAlgo();
         }
         add(){
-            var a = +this.a,
+            var a = +this.a, // + :可能是吧this的指向，修改到执行类的作用域，不知道这个猜想整不正确！！！
                 b = +this.b;
             return this.algo.add(a,b);
         }

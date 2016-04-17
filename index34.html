@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Injector - 注入器</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+import {Injector,Inject} from "angular2/core";
+
+//1.定义一个创建canvas画布的服务，因为有很多地方都可能用到，就不要在去写了
+class Canvas{
+	constructor(){
+		var canvas = document.createElement("canvas");
+        canvas.setAttribute("width","600px");
+        canvas.setAttribute("height","400px");
+    	var host = document.querySelector("ez-app");//获取自定义标签
+        host.innerHTML = "";                        //给加载进度的图片去掉
+        host.appendChild(canvas);                   //把canvas添加到自定义标签内
+		this.ctx = canvas.getContext("2d");         //设置canvas使用2d引擎绘图
+	}
+}
+
+//2.定义一个绘图 Face(面孔) 的类,这个类依赖Canvas服务类
+class Face{
+	constructor(@Inject(Canvas) canvas){//3.在这里把这个类注入进来
+		this.canvas = canvas;           //用属性接收。有点像原生js对象冒充实现继承的感觉，
+		                                //这样就可以使用Canvas服务类内定义的属性和方法
+	}
+	//定义渲染的方法
+	render(){
+		with(this.canvas.ctx){//4.这里使用对象点属性名，就能使用到服务里的属性了
+			beginPath();//这是canvas内开启一个新路径的方法
+                strokeStyle="black";
+                fillStyle = "black";
+                arc(100,100,100,0,Math.PI*2);
+                stroke();
+			beginPath();
+                arc(70,70,20,0,Math.PI*2);
+                arc(130,70,20,0,Math.PI*2);
+                fill();
+			beginPath();
+                arc(100,110,50,.5,Math.PI-.5);
+                stroke();
+		}
+	}
+}
+
+/*
+5.要理解的东西：
+Angular2的依赖注入机制实现的核心是一个作为第三方的注入器/Injector。
+通常使用Injector类的静态方法resolveAndCreate()来实例化一个注入器，
+在实例化时需要指定所有的依赖项：
+*/
+//这个就是一个自执行函数
++function bootup(){
+	var injector = Injector.resolveAndCreate([Canvas,Face]);//6.来实例化一个注入器，并制定依赖项。依赖项是一个数组
+                                                            //数组第一元素，是被依赖的服务类。
+                                                            //数组第二个元素，是依赖服务的类
+	var face = injector.get(Face);//7.一旦向依赖服务的类  注入服务成功，就会返回依赖服务类的实例。就相当new Face
+	face.render();                //8.就可以对象调方法 干任何事了
+}();
+
+
+//-----------------------------------------------------------------------------------------
+/*(function(){//和以上效果一样
+    var injector = Injector.resolveAndCreate([Canvas,Face]);
+	var face = injector.get(Face);
+	face.render();
+})();*/
+
+//加深对依赖注入的理解比喻
+/*
+    老师[父类,服务](老师有一只笔，能画画，能写字，能打毛衣。谁想用只要向老师借就可以了，是一个公用的，可复用的，类似 "服务")
+
+    学生[子类](学生想做一个画画的事情，但是学生只会画，没有笔，他需要向老师借笔。所以学生依赖老师的笔，才能画画。类似 "子类依赖父类")
+
+    var 得到笔的学生 = Injector.resolveAndCreate([老师,学生]);//相当学生向老师借笔
+        得到笔的学生.render(); //学生就可以画画了
+*/
+</script>
+</body>
+</html>
