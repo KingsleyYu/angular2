@@ -54,7 +54,7 @@
 	
 #### demo介绍
     1.快速上手
-	    index1.html ** hello world示例
+	    index1.html 	** hello world示例
 	2.组件开发 - 声明元数据    
 	    index2.html     ** selector - 声明选择符
 	    index3.html     ** template/templateUrl - 声明模板
