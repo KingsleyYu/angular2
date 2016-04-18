@@ -93,7 +93,9 @@
 	7.服务开发 - 封装与注入    
 	    index32.html    ** 服务 - 封装可复用代码：把公用的逻辑抽出，封装成一个服务
 	    index33.html    ** 注入服务 - providers。和index.32有很大区别
-	    index34.html    ** 使用Injector - 注入器。实现注入，和index.33有很大区别
+	    index34.html    ** Injector - 注入器。实现注入，和index.33有很大区别
+	    index35.html    ** Provider - 服务提供者。实现注入，和index.34区别不是太大，但比较灵活，详情看demo总结
+
 	    
 	    
 	    
