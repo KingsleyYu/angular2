@@ -10,32 +10,36 @@
 
 <script type="text/typescript">
 import {Injector,Inject} from "angular2/core";
-
-//1.定义一个创建canvas画布的服务，因为有很多地方都可能用到，就不要在去写了
+//1.定义一个服务类。是一个画布，和一只画笔。
 class Canvas{
 	constructor(){
 		var canvas = document.createElement("canvas");
         canvas.setAttribute("width","600px");
         canvas.setAttribute("height","400px");
-    	var host = document.querySelector("ez-app");//获取自定义标签
-        host.innerHTML = "";                        //给加载进度的图片去掉
-        host.appendChild(canvas);                   //把canvas添加到自定义标签内
-		this.ctx = canvas.getContext("2d");         //设置canvas使用2d引擎绘图
+    	var host = document.querySelector("ez-app");
+        host.innerHTML = "";
+        host.appendChild(canvas);
+		this.ctx = canvas.getContext("2d");
 	}
 }
+//2.定义一个服务类。是一个颜料类，里面有很多颜色
+class Color{
+    constructor(){
+        this.ctxColor = "red";
+    }
+}
 
-//2.定义一个绘图 Face(面孔) 的类,这个类依赖Canvas服务类
+//3.定义一个普通类。我有画画的功能，但是我没有画布和画笔，也没有颜料，所以我依赖Canvas类和Color类
 class Face{
-	constructor(@Inject(Canvas) canvas){//3.在这里把这个类注入进来
-		this.canvas = canvas;           //用属性接收。有点像原生js对象冒充实现继承的感觉，
-		                                //这样就可以使用Canvas服务类内定义的属性和方法
+	constructor(@Inject(Canvas) canvas,@Inject(Color) color){//在类的构造方法中使用  “@Inject(依赖类的类名) 类的实例对象” 来声明当前类需要的依赖
+		this.canvas = canvas;
+        this.color = color;
 	}
-	//定义渲染的方法
 	render(){
-		with(this.canvas.ctx){//4.这里使用对象点属性名，就能使用到服务里的属性了
-			beginPath();//这是canvas内开启一个新路径的方法
-                strokeStyle="black";
-                fillStyle = "black";
+		with(this.canvas.ctx){
+			beginPath();
+                strokeStyle= this.color.ctxColor;
+                fillStyle = this.color.ctxColor;
                 arc(100,100,100,0,Math.PI*2);
                 stroke();
 			beginPath();
@@ -49,20 +53,20 @@ class Face{
 	}
 }
 
-/*
-5.要理解的东西：
-Angular2的依赖注入机制实现的核心是一个作为第三方的注入器/Injector。
-通常使用Injector类的静态方法resolveAndCreate()来实例化一个注入器，
-在实例化时需要指定所有的依赖项：
-*/
-//这个就是一个自执行函数
+
+//3.这个就是一个自执行函数
 +function bootup(){
-	var injector = Injector.resolveAndCreate([Canvas,Face]);//6.来实例化一个注入器，并制定依赖项。依赖项是一个数组
-                                                            //数组第一元素，是被依赖的服务类。
-                                                            //数组第二个元素，是依赖服务的类
-	var face = injector.get(Face);//7.一旦向依赖服务的类  注入服务成功，就会返回依赖服务类的实例。就相当new Face
-	face.render();                //8.就可以对象调方法 干任何事了
+	var injector = Injector.resolveAndCreate([Canvas,Color,Face]);//通过注入器完成对整个“依赖注入”的实现
+	             //Injector.resolveAndCreate([服务类,服务类,依赖类]);  数组前的参数是根据依赖类依赖的顺序，分别依次注入
+	var face = injector.get(Face);//当注入完成会返回一个小注入器对象，通过.get()方法，获取完成依赖注入类的对象。这一步由ng2完成
+	face.render();//就可以干活了
 }();
+
+
+
+
+
+
 
 
 //-----------------------------------------------------------------------------------------
