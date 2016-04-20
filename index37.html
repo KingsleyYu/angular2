@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Provider的其他选项</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+import {Injector,Inject,Injectable,provide,Provider} from "angular2/core";
+//定义服务
+class Canvas{
+	constructor(@Inject("CANVAS_SELECTOR") selector){
+		var canvas = document.createElement("canvas");
+        canvas.setAttribute("width","600px");
+        canvas.setAttribute("height","400px");
+    	var host = document.querySelector(selector);
+        host.innerHTML = "";
+        host.appendChild(canvas);
+		this.ctx = canvas.getContext("2d");
+	}
+}
+
+class Face{
+	constructor(@Inject("Canvas") canvas){
+		this.canvas = canvas;
+	}
+	render(){
+		with(this.canvas.ctx){
+			beginPath();
+			strokeStyle="black";
+			fillStyle = "black";
+			arc(100,100,100,0,Math.PI*2);
+			stroke();
+			beginPath();
+			arc(70,70,20,0,Math.PI*2);
+			arc(130,70,20,0,Math.PI*2);
+			fill();
+			beginPath();
+			arc(100,110,50,.5,Math.PI-.5);
+			stroke();
+		}
+	}
+}
+
++function bootup(){
+	var injector = Injector.resolveAndCreate([
+    	provide("CANVAS_SELECTOR",{useValue:"ez-app"}),//实现对服务的依赖。也就是给服务类在创建对象的时候传入参数。
+		provide("Canvas",{useClass:Canvas,deps:["CANVAS_SELECTOR"]}),//在对Canvas实例化，注入
+		Face]);
+	var face = injector.get(Face);
+	face.render();
+}();
+
+</script>
+</body>
+</html>
