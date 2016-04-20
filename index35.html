@@ -2,77 +2,80 @@
 <html lang="zh_cn">
 <head>
     <meta charset="UTF-8">
-    <title>TOKEN - 服务标识</title>
+    <title>Provider - 服务提供者</title>
     <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
 </head>
 <body>
 <ez-app><img src="img/wait.gif"></ez-app>
 
 <script type="text/typescript">
-    import {Injector,Inject,Injectable,provide,Provider} from "angular2/core";
-    //1.Canvas类。得到2d画笔
-    class Canvas{
-        constructor(){
-            var canvas = document.createElement("canvas");
-            canvas.setAttribute("width","600px");
-            canvas.setAttribute("height","400px");
-            var host = document.querySelector("ez-app");
-            host.innerHTML = "";
-            host.appendChild(canvas);
-            this.ctx = canvas.getContext("2d");
-        }
-    }
-    //2.颜色类。定义要画的颜色
-    class Style{
-        constructor(){
-            this.color="red"
-        }
-    }
-
-    //3.要画一个面。
-    class Face{
-            constructor(@Inject("Canvas") canvas,@Inject("Style") style){//依赖画笔，依赖颜料
-            this.canvas = canvas;
-            this.style  = style;
-        }
-        render(){
-            with(this.canvas.ctx){
-                beginPath();
-                strokeStyle=this.style.color;
-                fillStyle = this.style.color;
-                arc(100,100,100,0,Math.PI*2);
-                stroke();
-                beginPath();
-                arc(70,70,20,0,Math.PI*2);
-                arc(130,70,20,0,Math.PI*2);
-                fill();
-                beginPath();
-                arc(100,110,50,.5,Math.PI-.5);
-                stroke();
-            }
-        }
-    }
-
-    //4.自执行方法
-    +function bootup(){
-        var injector = Injector.resolveAndCreate([//5.注入依赖
-            provide("Canvas",{useClass:Canvas}),//6.通过 provide()完成对依赖对象的注入实现。
-                                                //参数1：要注入的类，
-                                                //参数2：接收一个对象，键"useClass"是表示要实现类的对象，值表示要实现对象的类。造对象这一步由angular2完成
-            provide("Style",{useClass:Style}),  //按依赖顺序依次实现。
-            Face                                //7.依赖别人的类
-            ]);
-        var face = injector.get(Face);          //8.当Face类完成依赖注入后。返回该类的实例。就可以干活了
-        face.render();                          //9.干活
-    }();
+import {Injector,Inject,provide,Provider} from "angular2/core";
+//1.定义一个服务类。是一只2d的画笔
+class Canvas{
+	constructor(){
+	    console.log(arguments[0]);//接收实例化时传递的参数
+		var canvas = document.createElement("canvas");
+        canvas.setAttribute("width","600px");
+        canvas.setAttribute("height","400px");
+    	var host = document.querySelector("ez-app");
+        host.innerHTML = "";
+        host.appendChild(canvas);
+		this.ctx = canvas.getContext("2d");	}
+}
+//定义工厂方法，赋值造对象
+var canvasFactory = function(){
+	return new Canvas(1);
+}
 
 
-    /*
-       总结：在和index32.html,index33.html 这些页面例子比，主要区别在  注入这块‘provide("Style",{useClass:Style})’ 。当前这个
-       例子有点明确说要注入的类，你在传值得时候，传个类名把。
+//2.定义一个普通类，用来画一个面。需要依赖2d的画笔，还有颜料
+class Face{
+	constructor(@Inject("Canvas") canvas,@Inject("COLOR") color){//列出我要画画的依赖，需要什么东西。这一步叫对注入的依赖
+		this.canvas = canvas;
+		this.color = color;
+	}
+	render(){
+		var self =this;
+		with(this.canvas.ctx){
+			beginPath();
+			strokeStyle= self.color;
+			fillStyle = self.color;
+			arc(100,100,100,0,Math.PI*2);
+			stroke();
+			beginPath();
+			arc(70,70,20,0,Math.PI*2);
+			arc(130,70,20,0,Math.PI*2);
+			fill();
+			beginPath();
+			arc(100,110,50,.5,Math.PI-.5);
+			stroke();
+		}
+	}
+}
 
-       在前面的例子。都能实现，看开发式的应用场景。
-    */
+//3.通过Injector(注入器)，把画画需要依赖的东西给他。这一步叫 对依赖的注入
++function bootup(){//自执行方法
+	var injector = Injector.resolveAndCreate([
+            provide("Canvas",{useFactory:canvasFactory}),
+            provide("COLOR",{useValue:"red"}),
+            Face  //最后一个参数
+            //Injector.resolveAndCreate([]):通过注入器方法，可以完成 依赖注入  的实现
+            //provide("服务类名",{useFactory:工厂方法名}):给需要依赖的类 提供 对应的依赖。在内部会自动调用造对象的方法，返回找好的对象，并赋值useFactory这个固定的属性
+            //provide("服务类名",{useValue:"字符串"})
+            //最后一个参数:需要依赖别人的类
+		]);
+	var face = injector.get(Face);//当注入完成，就返回这个依赖别人类的对象。说明这个类已经实例话完成，需要依赖的东西都要了，可以干活了
+	face.render();//调用内部的方法，就可以话个红色的笑脸了
+}();
+
+
+/*
+总结：
+    学了这个知识点，感觉和index34.html内的功能差不多。
+    和index.34比较区别主要在于注入的过程，34中在注入类的实例话中都是有angular自己完成
+    而在本例子中，在为注入类的实例化中我们是通过自己的工厂方法完成实例化，然会把实例化的对象在传递给angular
+    这一点比较比起34中相对灵活，我很可以在工厂方法 “return new Canvas(2);” 这一不传递一个参数。而34中就实现不了
+*/
 </script>
 </body>
 </html>
