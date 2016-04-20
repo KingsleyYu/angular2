@@ -94,6 +94,7 @@
 	    index32.html    ** 服务 - 封装可复用代码：把公用的逻辑抽出，封装成一个服务
 	    index33.html    ** 注入服务 - providers。和index.32有很大区别
 	    index34.html    ** 使用Injector - 注入器。实现注入，和index.33有很大区别
+	    index34.html    ** 使用TOKEN - 服务标识。让依赖注入更简单
 	    
 	    
 	    

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>TOKEN - 服务标识</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+    import {Injector,Inject,Injectable,provide,Provider} from "angular2/core";
+    //1.Canvas类。得到2d画笔
+    class Canvas{
+        constructor(){
+            var canvas = document.createElement("canvas");
+            canvas.setAttribute("width","600px");
+            canvas.setAttribute("height","400px");
+            var host = document.querySelector("ez-app");
+            host.innerHTML = "";
+            host.appendChild(canvas);
+            this.ctx = canvas.getContext("2d");
+        }
+    }
+    //2.颜色类。定义要画的颜色
+    class Style{
+        constructor(){
+            this.color="red"
+        }
+    }
+
+    //3.要画一个面。
+    class Face{
+            constructor(@Inject("Canvas") canvas,@Inject("Style") style){//依赖画笔，依赖颜料
+            this.canvas = canvas;
+            this.style  = style;
+        }
+        render(){
+            with(this.canvas.ctx){
+                beginPath();
+                strokeStyle=this.style.color;
+                fillStyle = this.style.color;
+                arc(100,100,100,0,Math.PI*2);
+                stroke();
+                beginPath();
+                arc(70,70,20,0,Math.PI*2);
+                arc(130,70,20,0,Math.PI*2);
+                fill();
+                beginPath();
+                arc(100,110,50,.5,Math.PI-.5);
+                stroke();
+            }
+        }
+    }
+
+    //4.自执行方法
+    +function bootup(){
+        var injector = Injector.resolveAndCreate([//5.注入依赖
+            provide("Canvas",{useClass:Canvas}),//6.通过 provide()完成对依赖对象的注入实现。
+                                                //参数1：要注入的类，
+                                                //参数2：接收一个对象，键"useClass"是表示要实现类的对象，值表示要实现对象的类。造对象这一步由angular2完成
+            provide("Style",{useClass:Style}),  //按依赖顺序依次实现。
+            Face                                //7.依赖别人的类
+            ]);
+        var face = injector.get(Face);          //8.当Face类完成依赖注入后。返回该类的实例。就可以干活了
+        face.render();                          //9.干活
+    }();
+
+
+    /*
+       总结：在和index32.html,index33.html 这些页面例子比，主要区别在  注入这块‘provide("Style",{useClass:Style})’ 。当前这个
+       例子有点明确说要注入的类，你在传值得时候，传个类名把。
+
+       在前面的例子。都能实现，看开发式的应用场景。
+    */
+</script>
+</body>
+</html>
