@@ -23,15 +23,23 @@ class Canvas{
 	}
 }
 
+class Style{
+    constructor(@Inject("COLOR") color){
+        this.color = color;
+    }
+}
+
+
 class Face{
-	constructor(@Inject("Canvas") canvas){
+	constructor(@Inject("Canvas") canvas,@Inject("Style") style){
 		this.canvas = canvas;
+		this.style = style;
 	}
 	render(){
 		with(this.canvas.ctx){
 			beginPath();
-			strokeStyle="black";
-			fillStyle = "black";
+			strokeStyle=this.style.color;
+			fillStyle = this.style.color;
 			arc(100,100,100,0,Math.PI*2);
 			stroke();
 			beginPath();
@@ -47,13 +55,21 @@ class Face{
 
 +function bootup(){
 	var injector = Injector.resolveAndCreate([
-    	provide("CANVAS_SELECTOR",{useValue:"ez-app"}),//实现对服务的依赖。也就是给服务类在创建对象的时候传入参数。
-		provide("Canvas",{useClass:Canvas,deps:["CANVAS_SELECTOR"]}),//在对Canvas实例化，注入
-		Face]);
-	var face = injector.get(Face);
+    	    provide("CANVAS_SELECTOR",{useValue:"ez-app"}),//1.相当于定义一个变量CANVAS_SELECTOR。使用provide()这种注入的方式给其赋值。
+		    provide("Canvas",{useClass:Canvas,deps:["CANVAS_SELECTOR"]}),//2.在对Canvas实例化，通过deps这个属性，在给实例化的对象传入需要注入的参数
+            provide("COLOR",{useValue:"red"}),
+		    provide("Style",{useClass:Style,deps:["COLOR"]}),
+		    Face
+		]);
+	var face = injector.get(Face);//最终注入完成，返回一个对象
 	face.render();
 }();
 
+/*
+总结：当前这个例子中，在实现依赖注入这块又有了新玩法。通过在服务类里定义要依赖的参数，在注入时先通过注入的形式定义变量。就像标记 1 中
+      在通过注入的形式，通过deps属性，完成参数的传入。学到这个demo时，感觉前面几个demo都可以通过这种方式实现。
+      很赞，很赞
+*/
 </script>
 </body>
 </html>
