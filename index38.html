@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Injector Tree - 注入器树</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+    import {Inject,Component,platform} from "angular2/core";
+    import {
+        bootstrap,
+        BROWSER_PROVIDERS,
+        BROWSER_APP_PROVIDERS
+    } from "angular2/platform/browser";
+
+    //1.创建一个服务
+    class Mock{
+        constructor(){
+            this.id = Math.random();
+            console.log("generate ... " + this.id);
+        }
+    };
+
+    //2.定义组件A。
+    @Component({//视图
+        selector:"ez-a",
+        providers:[Mock],//要使用的服务，在控制器内完成服务的注入实例化对象
+        template:"<div>AAAA : {{ mock.id }}</div>",
+    })
+    class EzA{//控制器
+        constructor(@Inject(Mock) m){//依赖的服务
+            this.mock = m;
+            console.log("A got ..." + m.id);
+        }
+    }
+
+    //3.定义组件B
+    @Component({//视图
+        selector:"ez-b",
+        providers:[Mock],
+        template:"<div>BBBB : {{ mock.id }}</div>"
+    })
+    class EzB{//控制器
+        constructor(@Inject(Mock) m){//依赖的服务
+            this.mock = m;
+            console.log("B got ..." + m.id);
+        }
+    }
+
+    //4.定义组件。并嵌套使用组件A，组件B
+    @Component({//视图
+        selector:"ez-app",
+        template : `
+            <h1>EZ-APP</h1>
+            <ez-a></ez-a>
+            <ez-b></ez-b>
+        `,
+        directives:[EzA,EzB]//定义的组件，也是指令。以指令的形式使用组件
+    })
+    class EzApp{//控制器
+        constructor(){}
+    }
+
+    //5.使用angular2 bootstrap()自定完成依赖注入
+    //bootstrap(EzApp)
+    //创建PlatformRef对象
+    var pf = platform(BROWSER_PROVIDERS);
+    //创建ApplicationRef对象
+    var app = pf.application([BROWSER_APP_PROVIDERS]);
+    //启动根组件
+    app.bootstrap(EzApp);
+
+</script>
+</body>
+</html>

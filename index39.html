@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<base href=""><!-- 这个地方是一个关键的地方 -->
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>路由 - 初体验</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+    <style>
+        ez-app{background:#e9e9e9;border-radius:5px;display:block;padding:5px;}
+        nav{background:#ccc;padding:5px;}
+        nav b{cursor:pointer;}
+        h1{padding:10px;border-radius:5px;color:#fff}
+        ez-video h1{background:#f00;}
+        ez-music h1{background:#0f0;}
+    </style>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+import {Inject,Component} from "angular2/core";
+import {bootstrap} from "angular2/platform/browser";
+//引入路由相关类型定义
+import {
+	LocationStrategy,RouteConfig,
+    ROUTER_DIRECTIVES,ROUTER_PROVIDERS
+} from "angular2/router";
+
+//EzVideo组件1
+@Component({
+	selector:"ez-video",
+	template : `
+		<h3>视频：太阳的后裔</h3>
+		<video src="mp4/太阳的后裔-主题曲.mp4" autoplay="autoplay" controls="controls"></video>
+	`
+})
+class EzVideo{}
+
+
+//EzMusic组件2
+@Component({
+	selector:"ez-music",
+	template : `
+		<h3>音乐：平凡之路</h3>
+		<video src="mp4/平凡之路电影-后会无期.mp4" autoplay="autoplay" controls="controls"></video>
+    `
+})
+class EzMusic{}
+
+
+//EzApp组件 ： 路由配置与执行
+@Component({
+	selector:"ez-app",
+	directives:[ROUTER_DIRECTIVES],
+	template : `
+		<nav>
+			<!--声明路由入口-->
+			<a [routerLink]="['Video']">video</a> |
+			<a [routerLink]="['Music']">music</a> 
+		</nav>
+
+		<main>
+			<!--声明路由出口-->
+			<router-outlet></router-outlet>
+			<h1>欢迎来到 小峰的 音乐空间</h1>
+		</main>
+
+	`
+})
+//路由配置
+@RouteConfig([
+	{path:"/video", component:EzVideo,name:"Video"},
+	{path:"/music", component:EzMusic,name:"Music"}
+])
+class EzApp{
+	constructor(@Inject(LocationStrategy) ls){
+		ls.pushState = function(){};//simple hack for crash bug.简单的黑客攻击错误
+	}
+}
+
+//注入路由功能依赖项
+bootstrap(EzApp,[ROUTER_PROVIDERS]); //ROUTER_PROVIDERS : 依赖angular2提供的路由模块
+
+</script>
+</body>
+</html>

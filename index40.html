@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="UTF-8">
+    <title>路由 - 应用步骤</title>
+    <style>
+        ez-app{background:#e9e9e9;border-radius:5px;display:block;padding:5px;}
+        nav{background:#ccc;padding:5px;}
+        nav b{cursor:pointer;}
+        h1{padding:10px;border-radius:5px;color:#fff}
+        ez-video h1{background:#f00;}
+        ez-music h1{background:#0f0;}
+    </style>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+import {Inject,Component} from "angular2/core";
+import {bootstrap} from "angular2/platform/browser";
+import {
+	LocationStrategy,Router,
+    ROUTER_DIRECTIVES,ROUTER_PROVIDERS
+} from "angular2/router";
+
+@Component({
+	selector:"ez-video",
+	template : `
+		<h1>I LOVE THIS VIDEO!</h1>
+	`
+})
+class EzVideo{}
+
+@Component({
+	selector:"ez-music",
+	template : `
+		<h1>THAT'S FANTASTIC MUSIC!</h1>
+	`
+})
+class EzMusic{}
+
+@Component({
+	selector:"ez-app",
+	directives:[ROUTER_DIRECTIVES],
+	template : `
+		<nav>
+			<a (click)="go(['Video'])">video</a> |
+			<a (click)="go(['Music'])">music</a>
+		</nav>
+		<main>
+			<!--声明路由出口-->
+			<router-outlet></router-outlet>
+		</main>
+	`
+})
+class EzApp{
+	constructor(@Inject(Router) rt,@Inject(LocationStrategy) ls){
+		ls.pushState = function(){};
+		this.router = rt;
+		//配置路由
+		this.router.config([
+			{path:"/video", component:EzVideo,name:"Video"},
+			{path:"/music", component:EzMusic,name:"Music"}
+		]);
+	}
+	go(path){
+		//根据给定的url，选中组件并在outlet中激活
+		this.router.navigate(path);
+	}
+}
+
+bootstrap(EzApp,[ROUTER_PROVIDERS]);
+
+</script>
+</body>
+</html>

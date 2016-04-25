@@ -96,6 +96,10 @@
 	    index34.html    ** 使用Injector - 注入器。实现注入，和index.33有很大区别
 	    index35.html    ** Provider - 服务提供者。实现注入，和index.34区别不是太大，但比较灵活，详情看demo总结
 		index36.html    ** 使用TOKEN - 服务标识。让依赖注入更简单
+		index37.html    ** Provider的其他选项。在服务类里定义要依赖的参数，在注入时先注入服务类依赖的参数。在注入服务类，通过deps属性，完成依赖参数的传入。
+		index38.html    ** Injector Tree - 注入器树。使用angular2 bootstrap()自定完成依赖注入。主要通过指令的嵌套使用实现
+		index39.html    ** 路由 - 初体验
+		index40.html    ** 
 	    
 	    
 	    
