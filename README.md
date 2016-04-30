@@ -98,8 +98,15 @@
 		index36.html    ** 使用TOKEN - 服务标识。让依赖注入更简单
 		index37.html    ** Provider的其他选项。在服务类里定义要依赖的参数，在注入时先注入服务类依赖的参数。在注入服务类，通过deps属性，完成依赖参数的传入。
 		index38.html    ** Injector Tree - 注入器树。使用angular2 bootstrap()自定完成依赖注入。主要通过指令的嵌套使用实现
+	8.路由管理 - 原理与应用	
 		index39.html    ** 路由 - 初体验
-		index40.html    ** 
+		index40.html    ** 路由 - 应用步骤。<a href="javascript:void(0);" (click)="go(['Video'])">video</a> 
+		index41.html    ** RouteConfig - 路由配置注解。通过@RouteConfig()注解的方法配置路由
+		index42.html    ** RouterLink - 路由入口指令。通过 routerLink(路由入口指令)实现路由切换。感觉更高大上
+		index43.html    ** RouteRegistry - 路由注册表。这个不是特别明白，还请高人指点
+		index44.html    ** RouteParams - 路由参数。通过path属性值后:title来接收传过来的对象
+
+
 	    
 	    
 	    

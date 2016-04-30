@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<base href=""><!-- 这个地方是一个关键的地方 -->
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>RouteParams - 路由参数</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+import {Inject,Component} from "angular2/core";
+import {bootstrap} from "angular2/platform/browser";
+import {
+	LocationStrategy,RouteParams,RouteConfig,
+	ROUTER_DIRECTIVES,ROUTER_PROVIDERS
+} from "angular2/router";
+
+
+//EzAlbum组件
+@Component({
+	selector:"ez-album",
+	template : `<h3>{{title}}</h3>`//模板中需要用到title这个属性
+})
+class EzAlbum{
+	constructor(@Inject(RouteParams) params){//说明该组件需要接收路由参数，在使用该组件时传入参数
+		this.title = params.get("title");
+	}
+}
+
+//EzApp组件
+@Component({
+	selector:"ez-app",
+	directives:[ROUTER_DIRECTIVES],
+	template : `
+		<nav>
+		  <span>Albums: </span>
+		  <a [routerLink]="['Album',{title:'We Are the Champion'}]">Album 1#</a>//通过数组第二个参数，来设置参数
+		  <a [routerLink]="['Album',{title:'Let It Be'}]">Album 2#</a>
+		</nav>
+		<main>
+			<!--声明路由出口-->
+			<router-outlet></router-outlet>
+		</main>
+	`
+})
+@RouteConfig([
+	{path:"/music/album/:title", component:EzAlbum,name:"Album"}//通过path属性值后:title来接收传过来的对象
+])
+class EzApp{        	
+	constructor(@Inject(LocationStrategy) ls){
+		ls.pushState = function(){};
+	}
+
+}        
+		
+bootstrap(EzApp,[ROUTER_PROVIDERS]);
+</script>
+</body>
+</html>

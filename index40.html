@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<base href=""><!-- 这个地方是一个关键的地方 -->
 <html lang="zh_cn">
 <head>
     <meta charset="UTF-8">
@@ -19,11 +20,13 @@
 <script type="text/typescript">
 import {Inject,Component} from "angular2/core";
 import {bootstrap} from "angular2/platform/browser";
+//引入路由相关的预定义类型
 import {
 	LocationStrategy,Router,
     ROUTER_DIRECTIVES,ROUTER_PROVIDERS
 } from "angular2/router";
 
+//定义一个组件
 @Component({
 	selector:"ez-video",
 	template : `
@@ -32,6 +35,8 @@ import {
 })
 class EzVideo{}
 
+
+//在定义一个组件
 @Component({
 	selector:"ez-music",
 	template : `
@@ -40,24 +45,28 @@ class EzVideo{}
 })
 class EzMusic{}
 
+//定义组件
 @Component({
 	selector:"ez-app",
-	directives:[ROUTER_DIRECTIVES],
+	directives:[ROUTER_DIRECTIVES],//依赖ROUTER_DIRECTIVES
 	template : `
 		<nav>
-			<a (click)="go(['Video'])">video</a> |
-			<a (click)="go(['Music'])">music</a>
+			<!-- 执行路由，通过go(['Video']) 方法执行路由-->
+			<a href="javascript:void(0);" (click)="go(['Video'])">video</a> |
+			<a href="javascript:void(0);" (click)="go(['Music'])">music</a>
 		</nav>
 		<main>
-			<!--声明路由出口-->
+			<!--设置路由出口-->
 			<router-outlet></router-outlet>
 		</main>
 	`
 })
 class EzApp{
-	constructor(@Inject(Router) rt,@Inject(LocationStrategy) ls){
-		ls.pushState = function(){};
-		this.router = rt;
+	constructor(@Inject(Router) rt,@Inject(LocationStrategy) ls){//LocationStrategy定位策略
+		ls.pushState = function(){//切换路由后的回掉函数
+			console.log(this._baseHref);//指向当前页面地址
+		};
+		this.router = rt;//把注入的路由对象，赋值给一个属性保存下来
 		//配置路由
 		this.router.config([
 			{path:"/video", component:EzVideo,name:"Video"},
@@ -65,13 +74,11 @@ class EzApp{
 		]);
 	}
 	go(path){
-		//根据给定的url，选中组件并在outlet中激活
+		//在点击的超链接时,根据传过来值解析要显示哪个组件
 		this.router.navigate(path);
 	}
 }
-
-bootstrap(EzApp,[ROUTER_PROVIDERS]);
-
+bootstrap(EzApp,[ROUTER_PROVIDERS]);//声明路由相关依赖类型，通过bootstrap渲染组件
 </script>
 </body>
 </html>

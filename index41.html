@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<base href=""><!-- 这个地方是一个关键的地方 -->
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>RouteConfig - 路由配置注解</title>
+    <script type="text/javascript" src="dist/angular2.beta.stack.min.js"></script>
+</head>
+<body>
+<!-- 
+除了使用Router的config()方法进行路由配置，Angular2还提供了路由注解，允许我们 以注解的方式为组件添加路由： 
+-->
+<ez-app><img src="img/wait.gif"></ez-app>
+
+<script type="text/typescript">
+import {Inject,Component} from "angular2/core";
+import {bootstrap} from "angular2/platform/browser";
+import {LocationStrategy,RouteConfig,Router,ROUTER_DIRECTIVES,ROUTER_PROVIDERS} from "angular2/router";
+
+
+//EzVideo组件
+@Component({
+	selector:"ez-video",
+	template : `
+		<h1>I LOVE THIS VIDEO!</h1>
+	`
+})
+class EzVideo{}
+
+
+
+//EzMusic组件
+@Component({
+	selector:"ez-music",
+	template : `
+		<h1>THAT'S FANTASTIC MUSIC!</h1>
+	`
+})
+class EzMusic{}
+
+
+
+//EzApp组件
+@Component({
+	selector:"ez-app",
+	directives:[ROUTER_DIRECTIVES],
+	template : `
+		<!--声明路由入口-->
+		<nav>
+			<a (click)="go(['Video'])">video</a> | 
+			<a (click)="go(['Music'])">music</a> 
+		</nav>
+		<main>
+			<!--声明路由出口-->
+			<router-outlet></router-outlet>
+		</main>
+	`
+})
+/*
+路由配置注解,在index40中，我们通过this.router.config()这个方法在组件的构造方法中配置的路由。
+而当前例子通过@RouteConfig()注解的方法配置路由
+*/
+@RouteConfig([
+	{path:"/video", component:EzVideo,name:"Video"},
+	{path:"/music", component:EzMusic,name:"Music"}
+])
+class EzApp{
+	//注入路由器对象：Router
+	constructor(@Inject(Router) rt,@Inject(LocationStrategy) ls){
+		ls.pushState = function(){};
+		this.router  = rt;
+	}
+	go(path){
+		//根据给定的url，选中组件并在outlet中激活
+		this.router.navigate(path);
+	}
+}
+
+bootstrap(EzApp,[ROUTER_PROVIDERS]);//声明路由相关依赖类型，通过bootstrap渲染组件
+</script>
+</body>
+</html>
